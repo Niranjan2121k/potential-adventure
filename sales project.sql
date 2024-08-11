@@ -1,4 +1,3 @@
-create database sample_super_store;
 select * from order_list;
 select * from order_details;
 select * from sales_target;
