@@ -1,13 +1,16 @@
-use `zomato order analysis`;
-select * from delivery_partner;
-select * from food;
-select * from menu;
-select * from order_details;
-select * from orders;
-select * from restaurants;
-select * from users;
+Zomato Order Analysis SQL Queries
 
-##Query1: Find customers who have never ordered.
+USE `zomato order analysis`;
+
+SELECT * FROM delivery_partner;
+SELECT * FROM food;
+SELECT * FROM menu;
+SELECT * FROM order_details;
+SELECT * FROM orders;
+SELECT * FROM restaurants;
+SELECT * FROM users;
+
+-- ##Query1: Find customers who have never ordered.
 SELECT 
     `name`
 FROM
@@ -18,7 +21,7 @@ WHERE
         FROM
             orders);
 
-##Query2: Average Price/dish
+-- ##Query2: Average Price/dish
 SELECT 
     f_name, AVG(price) AS average_price
 FROM
@@ -27,7 +30,7 @@ FROM
     food USING (f_id)
 GROUP BY f_name;
 
-##Query3: Find the top restaurant in terms of the number of orders in June.
+-- ##Query3: Find the top restaurant in terms of the number of orders in June.
 SELECT 
     r_name,
     MONTHNAME(o.date) AS monthnames,
@@ -42,7 +45,7 @@ GROUP BY r_id
 ORDER BY counts DESC
 LIMIT 1;
 
-##Query 4: Restaurants with monthly sales greater than 1000 for July.
+-- ##Query4: Restaurants with monthly sales greater than 1000 for July.
 SELECT 
     r_name AS Restaurant_name,
     r_id AS restaurant_id,
@@ -56,7 +59,7 @@ WHERE
 GROUP BY Restaurant_name
 HAVING sales > 1000;
 
-##Query5: Show all orders with order details of Nitish (user_id = 1) from 10th June’22 to 10th July’22.
+-- ##Query5: Show all orders with order details of Nitish (user_id = 1) from 10th June’22 to 10th July’22.
 SELECT 
     *
 FROM
@@ -75,8 +78,8 @@ WHERE
     users = 'nitish'
         AND order_date BETWEEN '2022-06-10' AND '2022-07-10';
 
-##Query6: Find restaurants with maximum repeat customers.
- SELECT 
+-- ##Query6: Find restaurants with maximum repeat customers.
+SELECT 
     r_id, r_name, COUNT(*) AS counts, SUM(order_counts)
 FROM
     (SELECT 
@@ -93,39 +96,79 @@ FROM
 GROUP BY r_name
 ORDER BY counts DESC
 LIMIT 1;
- 
- 
-##Query7: Month-over-month revenue growth of Zomato.
-select month,revenue,concat(round(((revenue-prerevenue)/prerevenue)*100,2),"%") as MOM_revenue_percentage from(select month(date) as month,sum(amount) as revenue,lag(sum(amount))over(order by month(date)) as prerevenue from orders o group by month order by month)a;
 
-
-##Query8: Customer — favorite food.
-select name,f_name,counts from
-(select user_id,f_id,count(*) as counts,dense_rank()over(partition by user_id order by count(*)desc) as ranks 
-from orders join order_details using (order_id) group by f_id,user_id)a join users using(user_id) join food using(f_id) where ranks = 1;
-
-
-##Query9: Find the most loyal customers for all restaurants.
-select *,name from (select r_name as restaurant_name,user_id,r_id,count(*),rank()over (partition by r_id order by count(*) desc) as ranks from orders join restaurants using(r_id) group by user_id,r_id)a join users using(user_id) where ranks=1;
-
-
-##Query10: Month-over-month revenue growth of each restaurant.
-SELECT R_NAME,monthname,round(((sales-prerevenue)/prerevenue)*100,2)as MOM_revenue_percentage from (select date,r_name,r_id,monthname(date) as monthname,sum(amount) as sales,lag(sum(amount))over (partition by r_name order by month(date))as prerevenue from orders join restaurants using(r_id) group by r_name,monthname)a;
-
-
-##Query11:Top 3 most paired products.
+-- ##Query7: Month-over-month revenue growth of Zomato.
 SELECT 
-    *, COUNT(od.order_id) pair_count
+    month, revenue, CONCAT(ROUND(((revenue - prerevenue) / prerevenue) * 100, 2), "%") AS MOM_revenue_percentage 
+FROM 
+    (SELECT 
+        MONTH(date) AS month, SUM(amount) AS revenue, 
+        LAG(SUM(amount)) OVER (ORDER BY MONTH(date)) AS prerevenue 
+     FROM 
+         orders o 
+     GROUP BY month 
+     ORDER BY month) a;
+
+-- ##Query8: Customer — favorite food.
+SELECT 
+    name, f_name, counts 
 FROM
+    (SELECT 
+        user_id, f_id, COUNT(*) AS counts, 
+        DENSE_RANK() OVER (PARTITION BY user_id ORDER BY COUNT(*) DESC) AS ranks 
+     FROM 
+         orders 
+     JOIN order_details USING (order_id) 
+     GROUP BY f_id, user_id) a 
+JOIN users USING (user_id) 
+JOIN food USING (f_id) 
+WHERE ranks = 1;
+
+-- ##Query9: Find the most loyal customers for all restaurants.
+SELECT 
+    *, name 
+FROM 
+    (SELECT 
+        r_name AS restaurant_name, user_id, r_id, COUNT(*), 
+        RANK() OVER (PARTITION BY r_id ORDER BY COUNT(*) DESC) AS ranks 
+     FROM 
+         orders 
+     JOIN restaurants USING (r_id) 
+     GROUP BY user_id, r_id) a 
+JOIN users USING (user_id) 
+WHERE ranks = 1;
+
+-- ##Query10: Month-over-month revenue growth of each restaurant.
+SELECT 
+    R_NAME, monthname, 
+    ROUND(((sales - prerevenue) / prerevenue) * 100, 2) AS MOM_revenue_percentage 
+FROM 
+    (SELECT 
+        date, r_name, r_id, MONTHNAME(date) AS monthname, 
+        SUM(amount) AS sales, 
+        LAG(SUM(amount)) OVER (PARTITION BY r_name ORDER BY MONTH(date)) AS prerevenue 
+     FROM 
+         orders 
+     JOIN restaurants USING (r_id) 
+     GROUP BY r_name, monthname) a;
+
+-- ##Query11: Top 3 most paired products.
+SELECT 
+    *, COUNT(od.order_id) pair_count 
+FROM 
     order_details od 
-        JOIN
-    order_details od1 USING (order_id)
-        JOIN
-    food f1 ON od.f_id = f1.f_id
-        JOIN
-    food f2 ON od1.f_id = f2.f_id
-    WHERE
-    od.f_id < od1.f_id
-GROUP BY f1.f_name ,f2.f_name,order_id order by pair_count desc limit 3;
+        JOIN 
+    order_details od1 USING (order_id) 
+        JOIN 
+    food f1 ON od.f_id = f1.f_id 
+        JOIN 
+    food f2 ON od1.f_id = f2.f_id 
+WHERE 
+    od.f_id < od1.f_id 
+GROUP BY 
+    f1.f_name, f2.f_name, order_id 
+ORDER BY 
+    pair_count DESC 
+LIMIT 3;
 
 
