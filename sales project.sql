@@ -1,4 +1,107 @@
-Initial Setup Queries
+Portfolio Project: E-Commerce Sales and Marketing Analysis
+
+Project Objective:
+
+The primary goal of this project is to provide a comprehensive analysis of an e-commerce business’s sales and marketing performance using SQL. This analysis involves customer segmentation, profitability insights, sales trends, and sales target achievement. Through the application of data analytics, businesses can make data-driven decisions for growth and expansion.
+
+Project Summary
+	1.	Database Structure:
+	•	The project involves three main tables:
+	•	order_list: Contains order metadata such as order dates and customer information.
+	•	order_details: Details of the orders, including category, sub-category, profit, quantity, and amount.
+	•	sales_target: Monthly sales targets for different product categories.
+	•	Tables were joined, and columns were reformatted to create a cohesive and analyzable dataset.
+
+Analysis Breakdown
+
+1. Customer Segmentation with the RFM Model
+	•	Objective: Group customers based on their Recency (R), Frequency (F), and Monetary (M) values to tailor marketing campaigns.
+	•	Process:
+	•	Calculated RFM metrics for each customer.
+	•	Assigned RFM scores using SQL window functions.
+	•	Categorized customers into segments like “Champions,” “Loyal Customers,” “At Risk,” and “Lost.”
+	•	Insights:
+	•	Percentage breakdown of customer segments to identify high-value and dormant customers.
+
+2. Market Coverage Analysis
+	•	Objective: Understand the business’s geographical and demographic reach.
+	•	Key Metrics:
+	•	Total orders, unique customers, cities, and states served.
+	•	Insights:
+	•	Highlights the breadth of the business’s customer base and potential regions for expansion.
+
+3. Top 5 New Customers in 2019
+	•	Objective: Identify new customers with significant sales contributions.
+	•	Process:
+	•	Excluded customers with purchases in previous years.
+	•	Sorted new customers by total sales in 2019.
+	•	Insights:
+	•	Key new customers for targeted retention strategies.
+
+4. Profitability by Location
+	•	Objective: Identify the top 10 most profitable cities and states for potential expansion.
+	•	Process:
+	•	Aggregated profit and quantity data by state and city.
+	•	Ranked locations based on profitability.
+	•	Insights:
+	•	A roadmap for focusing marketing efforts on high-performing regions.
+
+5. First Order Analysis by State
+	•	Objective: Explore early adopters in each state to study buying behavior.
+	•	Process:
+	•	Used SQL window functions to rank orders by state and date.
+	•	Insights:
+	•	Found key trends in early customers’ orders.
+
+6. Sales Trends by Day of the Week
+	•	Objective: Understand how sales and order volume vary across days of the week.
+	•	Process:
+	•	Analyzed orders and sales by day using SQL date functions.
+	•	Insights:
+	•	Identification of peak sales days to optimize marketing campaigns.
+
+7. Monthly Profitability and Quantity Trends
+	•	Objective: Explore seasonal sales patterns and profitability trends.
+	•	Process:
+	•	Analyzed monthly profitability and quantity sold.
+	•	Insights:
+	•	Data-driven strategies for inventory management and marketing during peak seasons.
+
+8. Sales Target Analysis
+	•	Objective: Evaluate whether sales targets were achieved across categories.
+	•	Process:
+	•	Compared actual sales with targets and categorized months as “hit” or “fail.”
+	•	Insights:
+	•	Identified consistent and underperforming categories for strategic improvement.
+
+9. Category and Sub-Category Analysis
+	•	Objective: Analyze sales, profit, cost, and price trends across product categories and sub-categories.
+	•	Process:
+	•	Aggregated data to calculate total sales, profit, and quantity.
+	•	Calculated maximum cost and price per category.
+	•	Insights:
+	•	Key products driving profitability and areas to optimize pricing.
+
+Key Skills and Tools Utilized
+	•	SQL:
+	•	Joins, window functions, subqueries, views, and aggregate functions.
+	•	RFM segmentation, date manipulation, and statistical calculations.
+	•	Data Analysis:
+	•	Segmentation, trend analysis, and profitability evaluation.
+	•	Business Insights:
+	•	Data-driven strategies for customer retention, expansion, and sales optimization.
+
+Deliverables
+	•	SQL Queries: Comprehensive scripts covering all aspects of the analysis.
+	•	Dashboards/Visuals: (Optional) Convert the findings into visual insights using tools like Tableau, Power BI, or Excel.
+	•	Report: Summarized insights for stakeholders with actionable recommendations.
+
+Potential Extensions
+	•	Predictive Analytics: Implement machine learning models for customer lifetime value (CLV) predictions.
+	•	Interactive Dashboards: Real-time tracking of key metrics.
+	•	Advanced Segmentation: Use clustering techniques for deeper customer insights.
+
+This portfolio project highlights SQL’s power in driving actionable insights for business growth.Initial Setup Queries
 SELECT * FROM order_list;
 SELECT * FROM order_details;
 SELECT * FROM sales_target;
